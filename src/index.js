@@ -3,73 +3,77 @@
  * When you're ready to start on your site, clear the file. Happy hacking!
  **/
 
-const API = "https://platzi-avo.vercel.app/api/avo";
-const url = "https://platzi-avo.vercel.app/";
-const appNode = document.querySelector('#app')
+// Autor: MrKetchupp
+// Por fin tengo los conocimientos para poder usar la API de Rick and Morty
+console.log('Mommy Beidou❤️‍🔥')
+// API
+const API = 'https://rickandmortyapi.com/api';
+const appNode = document.querySelector('#app');
 
-const formatPrice =(precio)=>{
-
-    const newPrice = new window.Intl.NumberFormat('es-mx', {
-        style: 'currency',
-        currency: 'MXN'
-    }).format(precio);
-
-    return newPrice;
-}
-
-
+// Consultar API
 async function fetchData(urlAPI) {
     const response = await fetch(urlAPI);
-    const datos = await response.json();
-    console.log(datos.data[1].attributes);
-    const todosLosItems = [];
-    datos.data.forEach(item => {
-        // crear imagen
-        const imagen = document.createElement('img');
-        imagen.src = `${url}${item.image}`;
-        imagen.className = 'w-32 p-4 m-auto h-36';
+    const data = await response.json()
+    return data;
+}
 
-        // crear titulo
-        const title = document.createElement('h2');
-        title.textContent = item.name;
-        title.className = 'text-lg font-bold text-white';
+// Filtrando Jerrys
+async function searchCharacters(urlAPI, name) {
+    const jerrys = await fetchData(`${urlAPI}/character/?name=${name}`)
+    console.log(jerrys.results[0].image)
+    const todosLosItems = []
+    jerrys.results.forEach(item => {
+        // crear name
+        const name = document.createElement('h2');
+        name.textContent = item.name;
+        name.className = 'text-lg font-medium text-gray-600 dark:text-white'
 
-        // crear precio
-        const price = document.createElement('div');
-        price.textContent = formatPrice(item.price);
-        price.className = 'text-white';
+        // crear status
+        const status = document.createElement('p');
+        status.textContent = item.status;
 
-        // crear descripcions
-        const taste = document.createElement('p');
-        taste.textContent = item.attributes.taste;
-        taste.className = 'text-xs text-gray-50';
+        // crear image
+        const image = document.createElement('img');
+        image.src = item.image;
+        image.className = 'mx-auto object-cover rounded-full h-20 w-20';
+        item.status == 'Alive' ? image.classList.add('ring-4','ring-green-600', 'ring-offset-2', 'ring-opacity-40'): image.classList.add('ring-4','ring-red-600', 'ring-offset-2', 'ring-opacity-40');
 
-        // crear icon
-        const icon = document.createElement('img')
-        icon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAEdJREFUSEtjZCAS/P///z+yUkZGRkZitBKlCGTQqAUEg3M0iEaDCGcIMKKnDoJhRaKCUQsIBthoYTcaRIgQGC2uCaaGQRtEAIP7YAnS0t94AAAAAElFTkSuQmCC';
+        // crear species
+        const species = document.createElement('span');
+        species.textContent = item.species;
+        species.className = 'text-xs text-gray-400';
 
-        // crear button
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.append(icon);
-        button.className = 'w-10 h-10 mt-2 text-base font-medium text-white bg-green-500 rounded-full hover:bg-green-700 flex items-center justify-center';
+        //crear image container
+        const imageContainer = document.createElement('div')
+        imageContainer.append(image);
+        imageContainer.className = 'flex-shrink-0';
 
-        const nanoContainer = document.createElement('div');
-        nanoContainer.append(price, button)
-        nanoContainer.className = 'flex items-center justify-between';
+        // crear details container
+        const detailsContainer = document.createElement('div')
+        detailsContainer.append(name, species);
+        detailsContainer.className = 'mt-2 text-center flex flex-col';
 
+        // crear mini container
         const miniContainer = document.createElement('div');
-        miniContainer.append(title, taste, nanoContainer)
-        miniContainer.className = 'p-4 m-3 bg-green-400 rounded-lg';
+        miniContainer.append(imageContainer, detailsContainer);
+        miniContainer.className = 'flex-col  flex justify-center items-center';
 
-        const container = document.createElement('div')
-        container.append(imagen, miniContainer);
-        container.className = 'w-64 p-2 m-auto bg-white shadow-lg rounded-2xl relative flex-shrink-0 max-w-xs mx-2 mb-6';
+        // crear contenedor
+        const container = document.createElement('div');
+        container.append(miniContainer);
+        container.className = 'p-4';
 
+        // Agregando al array
         todosLosItems.push(container);
     });
     appNode.append(...todosLosItems);
-    appNode.className = 'flex flex-wrap items-center justify-center text-left';
+    appNode.className = 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6'
 }
 
-fetchData(API)
+searchCharacters(API, "jerry");
+
+//condition ? true_expression : false_expression
+
+const age = 20;
+
+const age_group = age < 18 ? "Child" : "Adult";
