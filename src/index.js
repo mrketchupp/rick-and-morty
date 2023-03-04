@@ -8,7 +8,9 @@
 console.log('Mommy Beidou❤️‍🔥')
 // API
 const API = 'https://rickandmortyapi.com/api';
+
 const appNode = document.querySelector('#app');
+appNode.addEventListener('click', (evento)=> {evento.target.nodeName === 'H2'? window.alert('hola'): null;});
 
 // Consultar API
 async function fetchData(urlAPI) {
@@ -71,9 +73,3 @@ async function searchCharacters(urlAPI, name) {
 }
 
 searchCharacters(API, "jerry");
-
-//condition ? true_expression : false_expression
-
-const age = 20;
-
-const age_group = age < 18 ? "Child" : "Adult";
